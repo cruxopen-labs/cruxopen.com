@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import { postsFor, postUrl, readingMinutes, formatDate } from "../data/blog";
+import type { Lang } from "../i18n/strings";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const b = strings[lang].blog;
+const posts = await postsFor(lang);
+---
+
+<Base
+  lang={lang}
+  title={`${b.eyebrow} · CruxOpen`}
+  description={b.lead}
+  alternates={{ en: "/blog/", zh: "/zh/blog/" }}
+>
+  <Header lang={lang} altHref={lang === "zh" ? "/blog/" : "/zh/blog/"} current="blog" />
+  <main id="main" class="wrap py-16 sm:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-b border-ink-700 pb-10">
+      <div>
+        <p class="eyebrow">{b.eyebrow}</p>
+        <h1 class="mt-4 text-4xl font-semibold tracking-[-0.025em] text-ink-100 sm:text-5xl">{b.title}</h1>
+        <p class="mt-4 max-w-xl text-ink-300">{b.lead}</p>
+      </div>
+      <a href="/rss.xml" class="font-mono text-xs text-ink-400 hover:text-signal-500">{b.rss} ↗</a>
+    </div>
+
+    <ol class="divide-y divide-ink-700">
+      {posts.map((p) => (
+        <li>
+          <a href={postUrl(p)} class="group grid gap-3 py-10 sm:grid-cols-[11rem_1fr] sm:gap-10">
+            <div class="font-mono text-xs text-ink-400">
+              <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date, lang)}</time>
+              <span class="block sm:mt-1">{readingMinutes(p.body, lang)} {b.minRead}</span>
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold leading-snug tracking-[-0.015em] text-ink-100 group-hover:text-signal-500">
+                {p.data.title}
+              </h2>
+              <p class="mt-3 max-w-3xl leading-relaxed text-ink-300">{p.data.description}</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {p.data.tags.map((tag) => (
+                  <span class="border border-ink-700 px-2 py-0.5 font-mono text-[11px] text-ink-400">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </main>
+  <Footer lang={lang} />
+</Base>

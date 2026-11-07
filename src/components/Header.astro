@@ -6,15 +6,20 @@ import { strings } from "../i18n/strings";
 
 interface Props {
   lang: Lang;
+  /** Where the language switch goes; the other language's home page by default. */
+  altHref?: string;
+  /** Which nav item is the current page. */
+  current?: "blog";
 }
-const { lang } = Astro.props;
+const { lang, altHref, current } = Astro.props;
 const n = strings[lang].nav;
 const home = lang === "zh" ? "/zh/" : "/";
+// Section links carry the home path so they also work from the blog pages.
 const links = [
-  { href: "#projects", label: n.projects },
-  { href: "#method", label: n.method },
-  { href: "#notes", label: n.notes },
-  { href: "#collaborate", label: n.collaborate },
+  { href: `${home}#projects`, label: n.projects },
+  { href: `${home}#method`, label: n.method },
+  { href: `${home}blog/`, label: n.blog, key: "blog" },
+  { href: `${home}#collaborate`, label: n.collaborate },
 ];
 ---
 
@@ -25,14 +30,24 @@ const links = [
     <nav aria-label="Primary" class="hidden md:block">
       <ul class="flex items-center gap-7 text-sm text-ink-300">
         {links.map((l) => (
-          <li><a class="transition-colors hover:text-ink-100" href={l.href}>{l.label}</a></li>
+          <li>
+            <a
+              class:list={["transition-colors hover:text-ink-100", l.key === current && "text-ink-100 underline decoration-signal-500 decoration-2 underline-offset-[6px]"]}
+              aria-current={l.key === current ? "page" : undefined}
+              href={l.href}
+            >{l.label}</a>
+          </li>
         ))}
       </ul>
     </nav>
 
     <div class="flex items-center gap-1">
       <a
-        href={n.langHref}
+        href={`${home}blog/`}
+        class="rounded-sm px-2.5 py-1.5 text-sm text-ink-300 transition-colors hover:bg-ink-850 hover:text-ink-100 md:hidden"
+      >{n.blog}</a>
+      <a
+        href={altHref ?? n.langHref}
         hreflang={lang === "zh" ? "en" : "zh-CN"}
         class="rounded-sm px-2.5 py-1.5 font-mono text-xs text-ink-300 transition-colors hover:bg-ink-850 hover:text-ink-100"
       >{n.lang}</a>

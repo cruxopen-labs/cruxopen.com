@@ -9,31 +9,34 @@
     "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Ink: a warm near-black, like a powered-down board under bench light */
-  --color-ink-950: #0b0b0a;
-  --color-ink-900: #121210;
-  --color-ink-850: #181816;
-  --color-ink-800: #1f1f1c;
-  --color-ink-700: #2c2c28;
-  --color-ink-600: #3d3d38;
-  --color-ink-400: #8a8a80;
-  --color-ink-300: #a9a99e;
-  --color-ink-200: #cfcfc4;
-  --color-ink-100: #ecece4;
+  /* Ink scale, light theme. The numbers are roles, not lightness:
+     950 is the page, 900/850 are raised panels, 800-600 are rules and borders,
+     400-200 are text from muted to body, 100 is headings. A datasheet on white. */
+  --color-ink-950: #ffffff;
+  --color-ink-900: #f7f7f4;
+  --color-ink-850: #efefea;
+  --color-ink-800: #e7e7e0;
+  --color-ink-700: #dadad2;
+  --color-ink-600: #b9b9ae;
+  --color-ink-400: #686860;
+  --color-ink-300: #4a4a44;
+  --color-ink-200: #33332f;
+  --color-ink-100: #111110;
 
-  /* Signal: one accent only, the amber of a logic-analyzer trace */
-  --color-signal-300: #ffd27a;
-  --color-signal-400: #ffbf47;
-  --color-signal-500: #f5a524;
-  --color-signal-600: #c98410;
+  /* Signal: one accent only, a deep amber that still reads as text on white
+     (600 is the lighter rule colour, 300/400 the darker hover and text tones). */
+  --color-signal-300: #92400e;
+  --color-signal-400: #9a4a0b;
+  --color-signal-500: #b45309;
+  --color-signal-600: #e0a043;
 
   /* Pass/verified marker */
-  --color-pass: #7ccf8a;
+  --color-pass: #15803d;
 }
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
   }
@@ -48,7 +51,7 @@
     @apply bg-signal-500 text-ink-950;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-signal-400;
+    @apply outline-2 outline-offset-2 outline-signal-500;
   }
 }
 
@@ -63,11 +66,11 @@
   .num {
     font-variant-numeric: tabular-nums;
   }
-  /* Faint board grid behind the hero */
+  /* Faint engineering-paper grid behind the hero */
   .grid-bg {
     background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+      linear-gradient(to right, rgb(17 17 16 / 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(17 17 16 / 0.055) 1px, transparent 1px);
     background-size: 32px 32px;
   }
   .btn-primary,
@@ -75,9 +78,123 @@
     @apply inline-flex items-center gap-2 rounded-sm px-4 py-2.5 text-sm font-medium transition-colors;
   }
   .btn-primary {
-    @apply bg-signal-500 text-ink-950 hover:bg-signal-400;
+    @apply bg-signal-500 text-ink-950 hover:bg-signal-300;
   }
   .btn-ghost {
     @apply border border-ink-600 text-ink-100 hover:border-ink-400 hover:bg-ink-850;
+  }
+
+  /* Long-form article text */
+  .prose {
+    @apply text-[17px] leading-[1.75] text-ink-200;
+  }
+  .prose > * + * {
+    margin-top: 1.15em;
+  }
+  .prose h2 {
+    @apply mt-14 scroll-mt-20 text-2xl font-semibold leading-snug tracking-[-0.015em] text-ink-100 sm:text-[1.7rem];
+  }
+  .prose h3 {
+    @apply mt-10 text-lg font-semibold text-ink-100;
+  }
+  .prose h2 + *,
+  .prose h3 + * {
+    margin-top: 0.7em;
+  }
+  .prose a {
+    @apply text-ink-100 underline decoration-signal-600 decoration-2 underline-offset-[3px] hover:text-signal-500;
+  }
+  .prose strong {
+    @apply font-semibold text-ink-100;
+  }
+  .prose ul,
+  .prose ol {
+    @apply space-y-2 pl-6;
+  }
+  .prose ul { list-style: square; }
+  .prose ol { list-style: decimal; }
+  .prose li::marker {
+    @apply text-signal-500;
+  }
+  .prose code {
+    @apply rounded-[3px] bg-ink-850 px-[0.35em] py-[0.1em] font-mono text-[0.86em] text-ink-100;
+  }
+  .prose pre {
+    @apply overflow-x-auto rounded-sm border border-ink-700 bg-ink-900 p-4 text-sm leading-relaxed;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0 text-[13px];
+  }
+  .prose blockquote {
+    @apply border-l-2 border-signal-500 bg-ink-900 px-5 py-3 text-ink-300;
+  }
+  .prose hr {
+    @apply my-12 border-ink-700;
+  }
+  .prose .table-wrap {
+    @apply -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0;
+  }
+  .prose table {
+    @apply w-full border-collapse text-left text-[14px] leading-snug;
+  }
+  .prose thead th {
+    @apply border-b border-ink-600 py-2 pr-4 align-bottom font-mono text-[11px] font-normal uppercase tracking-wider text-ink-400;
+    white-space: nowrap;
+  }
+  .prose tbody td {
+    @apply border-b border-ink-800 py-2.5 pr-4 align-top;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose tbody tr.hl td {
+    @apply font-semibold text-ink-100;
+  }
+  .prose td.r,
+  .prose th.r {
+    @apply text-right;
+  }
+  .prose figure {
+    @apply my-9;
+  }
+  .prose figcaption {
+    @apply mt-3 text-[13px] leading-snug text-ink-400;
+  }
+
+  /* Horizontal bar chart written as plain HTML inside Markdown.
+     Each bar sets its length with style="--w:NN%". */
+  .vchart {
+    @apply border border-ink-700 bg-ink-900 p-4 sm:p-6;
+  }
+  .vchart-row {
+    @apply grid items-center gap-3 py-[5px] font-mono text-[12px] sm:text-[13px];
+    grid-template-columns: 2.6rem 1fr 3.6rem;
+  }
+  .vchart-k {
+    @apply text-ink-400;
+  }
+  .vchart-bar {
+    @apply block h-[14px] bg-ink-600;
+    width: max(var(--w), 3px);
+  }
+  .vchart-last .vchart-bar {
+    @apply bg-signal-500;
+  }
+  .vchart-last .vchart-k,
+  .vchart-last .vchart-v {
+    @apply font-semibold text-signal-500;
+  }
+  .vchart-v {
+    @apply text-right text-ink-200;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose .vchart figcaption {
+    @apply mt-4 border-t border-ink-700 pt-3;
+  }
+}
+
+/* In tables with four or more columns, keep the description column readable
+   on a phone; the table scrolls sideways instead. */
+@layer components {
+  .prose tr:has(> td:nth-child(4)) > td:nth-child(2) {
+    min-width: 13rem;
   }
 }

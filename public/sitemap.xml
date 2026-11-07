@@ -10,4 +10,18 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/"/>
   </url>
+  <url><loc>https://cruxopen.com/blog/</loc></url>
+  <url><loc>https://cruxopen.com/zh/blog/</loc></url>
+  <url>
+    <loc>https://cruxopen.com/blog/qwen35-kv260-bit-exact/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/blog/qwen35-kv260-bit-exact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/blog/qwen35-kv260-bit-exact/"/>
+  </url>
+  <url>
+    <loc>https://cruxopen.com/zh/blog/qwen35-kv260-bit-exact/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/blog/qwen35-kv260-bit-exact/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/blog/qwen35-kv260-bit-exact/"/>
+  </url>
 </urlset>

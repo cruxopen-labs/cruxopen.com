@@ -5,49 +5,58 @@ import { strings } from "../i18n/strings";
 
 interface Props {
   lang: Lang;
+  /** Page title and description; the home page's are used when omitted. */
+  title?: string;
+  description?: string;
+  /** Paths of this page in each language, for hreflang. Defaults to the home pages. */
+  alternates?: { en?: string; zh?: string };
+  ogType?: "website" | "article";
+  /** Extra JSON-LD for this page (an Article, say). */
+  jsonLd?: Record<string, unknown>;
 }
-const { lang } = Astro.props;
+const { lang, title, description, alternates = { en: "/", zh: "/zh/" }, ogType = "website", jsonLd } = Astro.props;
 const t = strings[lang];
+const pageTitle = title ?? t.meta.title;
+const pageDescription = description ?? t.meta.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const enUrl = new URL("/", Astro.site);
-const zhUrl = new URL("/zh/", Astro.site);
+const enUrl = alternates.en ? new URL(alternates.en, Astro.site) : undefined;
+const zhUrl = alternates.zh ? new URL(alternates.zh, Astro.site) : undefined;
 const ogImage = new URL("/og.png", Astro.site);
+const org = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "CruxOpen",
+  url: "https://cruxopen.com",
+  email: "hello@cruxopen.com",
+  sameAs: ["https://github.com/cruxopen-labs"],
+};
 ---
 
 <!doctype html>
-<html lang={lang === "zh" ? "zh-CN" : "en"} style="background:#0b0b0a;color:#cfcfc4;color-scheme:dark">
+<html lang={lang === "zh" ? "zh-CN" : "en"} style="background:#ffffff;color:#33332f;color-scheme:light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{t.meta.title}</title>
-    <meta name="description" content={t.meta.description} />
-    <meta name="theme-color" content="#0b0b0a" />
-    <meta name="color-scheme" content="dark" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {zhUrl && <link rel="alternate" hreflang="zh-CN" href={zhUrl} />}
+    {enUrl && <link rel="alternate" hreflang="x-default" href={enUrl} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="CruxOpen blog" href="/rss.xml" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="CruxOpen" />
-    <meta property="og:title" content={t.meta.title} />
-    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        name: "CruxOpen",
-        url: "https://cruxopen.com",
-        email: "hello@cruxopen.com",
-        sameAs: ["https://github.com/cruxopen-labs"],
-      })}
-    />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? org)} />
   </head>
   <body class="min-h-dvh">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink-900 focus:px-3 focus:py-2">

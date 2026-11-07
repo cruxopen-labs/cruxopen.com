@@ -1,0 +1,82 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import { EMAIL } from "../data/site";
+import { type Post, postUrl, translationOf, readingMinutes, formatDate, parseId } from "../data/blog";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { lang } = parseId(post.id);
+const b = strings[lang].blog;
+const { Content } = await render(post);
+const other = await translationOf(post);
+const here = postUrl(post);
+const there = other ? postUrl(other) : undefined;
+const blogHome = lang === "zh" ? "/zh/blog/" : "/blog/";
+const iso = post.data.date.toISOString().slice(0, 10);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: iso,
+  inLanguage: lang === "zh" ? "zh-CN" : "en",
+  author: { "@type": "Person", name: post.data.author },
+  publisher: { "@type": "Organization", name: "CruxOpen", url: "https://cruxopen.com" },
+  mainEntityOfPage: new URL(here, Astro.site).toString(),
+  image: new URL("/og.png", Astro.site).toString(),
+};
+---
+
+<Base
+  lang={lang}
+  title={`${post.data.title} · CruxOpen`}
+  description={post.data.description}
+  alternates={lang === "zh" ? { en: there, zh: here } : { en: here, zh: there }}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <Header lang={lang} altHref={there ?? (lang === "zh" ? "/blog/" : "/zh/blog/")} current="blog" />
+
+  <main id="main">
+    <article>
+      <header class="border-b border-ink-700 bg-ink-900">
+        <div class="wrap max-w-3xl py-14 sm:py-20">
+          <a href={blogHome} class="font-mono text-xs text-ink-400 hover:text-signal-500">← {b.back}</a>
+          <h1 class="mt-6 text-[2rem] font-semibold leading-[1.12] tracking-[-0.025em] text-ink-100 sm:text-5xl">
+            {post.data.title}
+          </h1>
+          <p class="mt-5 text-lg leading-relaxed text-ink-300">{post.data.description}</p>
+          <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs text-ink-400">
+            <span>{b.by} <span class="text-ink-100">{post.data.author}</span></span>
+            <time datetime={iso}>{formatDate(post.data.date, lang)}</time>
+            <span>{readingMinutes(post.body, lang)} {b.minRead}</span>
+            {there && <a href={there} class="text-ink-200 underline decoration-signal-600 underline-offset-4 hover:text-signal-500">{b.other}</a>}
+          </div>
+        </div>
+      </header>
+
+      <div class="wrap max-w-3xl py-12 sm:py-16">
+        <div class="prose">
+          <Content />
+        </div>
+
+        <aside class="mt-16 border border-ink-700 bg-ink-900 p-6 sm:p-8">
+          <p class="text-lg font-semibold text-ink-100">{b.endTitle}</p>
+          <p class="mt-2 text-ink-300">{b.endText}</p>
+          <a href={`mailto:${EMAIL}?subject=${encodeURIComponent(post.data.title)}`} class="btn-primary mt-5">{EMAIL}</a>
+        </aside>
+
+        <a href={blogHome} class="mt-10 inline-block font-mono text-xs text-ink-400 hover:text-signal-500">← {b.back}</a>
+      </div>
+    </article>
+  </main>
+
+  <Footer lang={lang} />
+</Base>

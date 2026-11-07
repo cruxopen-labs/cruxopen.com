@@ -8,7 +8,7 @@ const en = {
     description:
       "Open-source NPU and ISP hardware, from golden model to RTL to a running FPGA board. openTARS runs Qwen3.5-0.8B bit-exact on an AMD Kria KV260; openISP is a SystemVerilog camera pipeline running 4K30 on the same board.",
   },
-  nav: { projects: "Projects", method: "Method", notes: "Notes", collaborate: "Collaborate", lang: "中文", langHref: "/zh/" },
+  nav: { projects: "Projects", method: "Method", notes: "Notes", collaborate: "Collaborate", blog: "Blog", lang: "中文", langHref: "/zh/" },
   hero: {
     eyebrow: "Open silicon · Algorithm → RTL → Board",
     title1: "Open hardware,",
@@ -86,8 +86,10 @@ const en = {
   notes: {
     eyebrow: "03 / Engineering notes",
     title: "What the hardware taught us.",
-    lead: "Short lessons from the project logs. Long-form articles are on the way.",
+    lead: "Short lessons from the project logs. The long version is on the blog.",
     read: "Read in the repo",
+    featured: "Long read",
+    featuredCta: "Read the article",
     items: {
       gemv: { t: "A GEMV is not a GEMM with M = 1", d: "An output-stationary array uses one row at decode. A dot-product path at the port's 16 B/cycle made decode port-bound." },
       dram: { t: "A DRAM model changes what is worth optimizing", d: "A row interleave that was harmless on an ideal port cost 2.7× read amplification on LPDDR4X." },
@@ -109,6 +111,18 @@ const en = {
     subject: "Project enquiry via cruxopen.com",
     note: "Tell us what you are building, where it runs, and what “done” looks like.",
   },
+  blog: {
+    eyebrow: "Blog",
+    title: "Engineering notes from the bench.",
+    lead: "Long-form write-ups of what the hardware did, with the numbers from the board.",
+    minRead: "min read",
+    by: "By",
+    back: "All posts",
+    rss: "RSS",
+    other: "阅读中文版",
+    endTitle: "Working on edge inference silicon?",
+    endText: "Questions, corrections and project ideas are welcome.",
+  },
   footer: {
     tagline: "Open silicon, from algorithm to board.",
     licenses: "openTARS is Apache-2.0 · openISP is MIT",
@@ -123,7 +137,7 @@ const zh: Dict = {
     description:
       "开源 NPU 与 ISP 硬件：从 Golden Model 到 RTL，再到真实运行的 FPGA 板卡。openTARS 在 AMD Kria KV260 上逐位一致地运行 Qwen3.5-0.8B；openISP 是一条在同一板卡上跑通 4K30 的 SystemVerilog 相机流水线。",
   },
-  nav: { projects: "项目", method: "方法", notes: "笔记", collaborate: "合作", lang: "EN", langHref: "/" },
+  nav: { projects: "项目", method: "方法", notes: "笔记", collaborate: "合作", blog: "博客", lang: "EN", langHref: "/" },
   hero: {
     eyebrow: "开源芯片 · 算法 → RTL → 板卡",
     title1: "开源硬件，",
@@ -200,8 +214,10 @@ const zh: Dict = {
   notes: {
     eyebrow: "03 / 工程笔记",
     title: "硬件教会我们的事。",
-    lead: "来自项目日志的简短经验，完整技术文章即将发布。",
+    lead: "来自项目日志的简短经验，完整的长文在博客里。",
     read: "在仓库中阅读",
+    featured: "长文",
+    featuredCta: "阅读全文",
     items: {
       gemv: { t: "GEMV 不是 M = 1 的 GEMM", d: "输出驻留阵列在解码时只用到一行。按端口 16 B/cycle 设计的点积通路，让解码变成纯带宽受限。" },
       dram: { t: "DRAM 模型会改变优化重点", d: "理想端口下无害的行交织，在 LPDDR4X 上造成了 2.7 倍的读放大。" },
@@ -222,6 +238,18 @@ const zh: Dict = {
     cta: "发邮件联系",
     subject: "来自 cruxopen.com 的项目咨询",
     note: "请简单说明：你在做什么、运行在什么平台上、怎样算“完成”。",
+  },
+  blog: {
+    eyebrow: "博客",
+    title: "来自工作台的工程笔记。",
+    lead: "硬件实际表现的长文记录，数字都来自板上实测。",
+    minRead: "分钟阅读",
+    by: "作者",
+    back: "全部文章",
+    rss: "RSS",
+    other: "Read in English",
+    endTitle: "也在做端侧推理芯片？",
+    endText: "欢迎提问、指正，或聊聊项目想法。",
   },
   footer: {
     tagline: "开源芯片，从算法到板卡。",

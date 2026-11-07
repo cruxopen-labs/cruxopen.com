@@ -1,5 +1,6 @@
 ---
 import { notes } from "../data/site";
+import { postsFor, postUrl, readingMinutes } from "../data/blog";
 import type { Lang } from "../i18n/strings";
 import { strings } from "../i18n/strings";
 
@@ -8,6 +9,8 @@ interface Props {
 }
 const { lang } = Astro.props;
 const n = strings[lang].notes;
+const minRead = strings[lang].blog.minRead;
+const [latest] = await postsFor(lang);
 ---
 
 <section id="notes" class="scroll-mt-14 border-b border-ink-800 py-20 sm:py-28">
@@ -20,7 +23,25 @@ const n = strings[lang].notes;
       <p class="max-w-sm text-sm text-ink-400">{n.lead}</p>
     </div>
 
-    <div class="mt-12 grid gap-4 md:grid-cols-2">
+    {latest && (
+      <a
+        href={postUrl(latest)}
+        class="group mt-12 grid gap-6 border border-ink-600 bg-ink-950 p-6 transition-colors hover:border-signal-500 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end"
+      >
+        <div>
+          <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-signal-500">
+            {n.featured} · {readingMinutes(latest.body, lang)} {minRead}
+          </span>
+          <h3 class="mt-3 max-w-3xl text-2xl font-semibold leading-snug tracking-[-0.015em] text-ink-100 group-hover:text-signal-500 sm:text-[1.75rem]">
+            {latest.data.title}
+          </h3>
+          <p class="mt-3 max-w-3xl leading-relaxed text-ink-300">{latest.data.description}</p>
+        </div>
+        <span class="btn-primary self-start lg:self-end">{n.featuredCta} →</span>
+      </a>
+    )}
+
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
       {notes.map((note) => {
         const item = n.items[note.id];
         return (
