@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter-tight";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Fonts are bundled locally (no Google Fonts) so the site renders the same
+   for visitors in mainland China. */
+@theme {
+  --font-sans: "Inter Tight Variable", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Ink: a warm near-black, like a powered-down board under bench light */
+  --color-ink-950: #0b0b0a;
+  --color-ink-900: #121210;
+  --color-ink-850: #181816;
+  --color-ink-800: #1f1f1c;
+  --color-ink-700: #2c2c28;
+  --color-ink-600: #3d3d38;
+  --color-ink-400: #8a8a80;
+  --color-ink-300: #a9a99e;
+  --color-ink-200: #cfcfc4;
+  --color-ink-100: #ecece4;
+
+  /* Signal: one accent only, the amber of a logic-analyzer trace */
+  --color-signal-300: #ffd27a;
+  --color-signal-400: #ffbf47;
+  --color-signal-500: #f5a524;
+  --color-signal-600: #c98410;
+
+  /* Pass/verified marker */
+  --color-pass: #7ccf8a;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    @apply bg-ink-950 text-ink-200 font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    @apply bg-signal-500 text-ink-950;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-signal-400;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  /* Section label, e.g. "01 / PROJECTS" */
+  .eyebrow {
+    @apply font-mono text-[11px] tracking-[0.18em] uppercase text-ink-400;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Faint board grid behind the hero */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .btn-primary,
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-sm px-4 py-2.5 text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply bg-signal-500 text-ink-950 hover:bg-signal-400;
+  }
+  .btn-ghost {
+    @apply border border-ink-600 text-ink-100 hover:border-ink-400 hover:bg-ink-850;
+  }
+}

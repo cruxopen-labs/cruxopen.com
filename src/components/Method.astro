@@ -1,0 +1,30 @@
+---
+import type { Lang } from "../i18n/strings";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const m = strings[lang].method;
+---
+
+<section id="method" class="scroll-mt-14 border-b border-ink-800 bg-ink-900 py-20 sm:py-28">
+  <div class="wrap">
+    <p class="eyebrow">{m.eyebrow}</p>
+    <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-[-0.02em] text-ink-100 sm:text-4xl">{m.title}</h2>
+
+    <ol class="mt-12 grid gap-px overflow-hidden border border-ink-700 bg-ink-700 sm:grid-cols-2 lg:grid-cols-4">
+      {m.steps.map((s, i) => (
+        <li class="relative bg-ink-950 p-6">
+          <div class="flex items-center justify-between font-mono text-xs">
+            <span class="text-signal-400">{String(i + 1).padStart(2, "0")} · {s.k}</span>
+            {i < m.steps.length - 1 && <span class="hidden text-ink-600 lg:inline" aria-hidden="true">──▶</span>}
+          </div>
+          <h3 class="mt-5 text-lg font-semibold text-ink-100">{s.t}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-300">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import { EMAIL } from "../data/site";
+import type { Lang } from "../i18n/strings";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = strings[lang].collab;
+const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(c.subject)}`;
+---
+
+<section id="collaborate" class="scroll-mt-14 py-20 sm:py-28">
+  <div class="wrap grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+    <div>
+      <p class="eyebrow">{c.eyebrow}</p>
+      <h2 class="mt-4 text-3xl font-semibold tracking-[-0.02em] text-ink-100 sm:text-4xl">{c.title}</h2>
+      <p class="mt-4 max-w-md leading-relaxed text-ink-300">{c.lead}</p>
+
+      <div class="mt-9 border border-ink-700 bg-ink-900 p-5">
+        <a href={mailto} class="btn-primary">{c.cta} <span aria-hidden="true">→</span></a>
+        <p class="mt-4 select-all font-mono text-sm text-ink-100">{EMAIL}</p>
+        <p class="mt-3 text-sm leading-relaxed text-ink-400">{c.note}</p>
+      </div>
+    </div>
+
+    <ul class="grid gap-px self-start overflow-hidden border border-ink-700 bg-ink-700 sm:grid-cols-2">
+      {c.areas.map((a, i) => (
+        <li class="bg-ink-950 p-6">
+          <span class="font-mono text-[11px] text-signal-400">{String(i + 1).padStart(2, "0")}</span>
+          <h3 class="mt-3 font-semibold text-ink-100">{a.t}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-300">{a.d}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

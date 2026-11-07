@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import Projects from "./Projects.astro";
+import Method from "./Method.astro";
+import Notes from "./Notes.astro";
+import Collaborate from "./Collaborate.astro";
+import Footer from "./Footer.astro";
+import type { Lang } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<Base lang={lang}>
+  <Header lang={lang} />
+  <main id="main">
+    <Hero lang={lang} />
+    <Projects lang={lang} />
+    <Method lang={lang} />
+    <Notes lang={lang} />
+    <Collaborate lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Base>

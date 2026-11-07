@@ -1,0 +1,233 @@
+// All page copy, English first. Numbers live in src/data/site.ts.
+
+export type Lang = "en" | "zh";
+
+const en = {
+  meta: {
+    title: "CruxOpen — Open hardware, verified bit for bit",
+    description:
+      "Open-source NPU and ISP hardware, from golden model to RTL to a running FPGA board. openTARS runs Qwen3.5-0.8B bit-exact on an AMD Kria KV260; openISP is a SystemVerilog camera pipeline running 4K30 on the same board.",
+  },
+  nav: { projects: "Projects", method: "Method", notes: "Notes", collaborate: "Collaborate", lang: "中文", langHref: "/zh/" },
+  hero: {
+    eyebrow: "Open silicon · Algorithm → RTL → Board",
+    title1: "Open hardware,",
+    title2: "verified bit for bit.",
+    lead:
+      "CruxOpen builds AI accelerators and image pipelines in the open: an executable golden model first, RTL that matches it on every byte, and a real FPGA board at the end.",
+    ctaProjects: "See the projects",
+    ctaContact: "Start a conversation",
+    factsLabel: "Measured, not projected",
+  },
+  facts: {
+    tarsDecode: { label: "Qwen3-0.6B decode on a KV260", unit: "s/token" },
+    tarsExact: { label: "Qwen3.5-0.8B vs golden model", value: "Bit-exact", unit: "every logit, on board" },
+    ispVideo: { label: "openISP live camera pipeline", unit: "on board" },
+    tarsMutants: { label: "regression tests, plus 141 RTL mutants", unit: "tests" },
+  },
+  projects: {
+    eyebrow: "01 / Projects",
+    title: "Two open-source designs, both running on hardware.",
+    lead: "Each repository holds the golden model, the RTL, the board build and the software that drives it.",
+    source: "Source",
+    tars: {
+      kind: "LLM accelerator · NPU",
+      tagline: "A single-core NPU that runs Qwen3.5-0.8B and Qwen3-0.6B on an off-the-shelf FPGA board, with every logit matching the golden model.",
+      demoAlt: "Qwen3.5-0.8B chatting on the KV260 through the openTARS NPU",
+      tableModel: "Model",
+      tableArch: "Layers",
+      tableDecode: "Decode",
+      tableImage: "Model image",
+      specsTitle: "On the board",
+      specBoard: "Board",
+      specClock: "Core clock",
+      specLut: "LUT use",
+      specQuant: "Weights",
+      specHistory: "Bitstream v1.0 → v3.3",
+      verifyTitle: "How it is verified",
+      verify: [
+        "Executable contract and golden model in Python, checked against transformers before any RTL",
+        "RTL vs golden, byte for byte: random queues, random stalls, five array shapes",
+        "748 regression tests and a 141-mutant check: every injected RTL bug must be caught",
+        "Same core timed for ASIC: 1 GHz pre-layout on ASAP7",
+      ],
+      honest: "Honest numbers: MTP speculative decoding is implemented and bit-identical, but averages 0.97× on this hardware (break-even at 77% draft hits), so it ships off by default.",
+      links: { repo: "GitHub repository", video: "Full demo video", log: "Project log (Chinese)" },
+    },
+    isp: {
+      kind: "Camera pipeline · ISP",
+      tagline: "A full image signal processor in SystemVerilog (no HLS), from RAW sensor input to a live HDMI preview, with hardware 3A statistics and its own tuning tool.",
+      imgAlt: "openISP pipeline block diagram",
+      specsTitle: "On the board",
+      specSensor: "Sensor",
+      specVideo: "Video",
+      specClock: "Video clock",
+      specThroughput: "Datapath",
+      specMeasured: "Measured",
+      specLut: "Area",
+      blocksTitle: "RTL blocks, bit-exact vs the integer model",
+      stackTitle: "Full stack",
+      stackLine: "RTL → AXI4-Lite control → V4L2 driver → AE/AWB/AF daemon → PC tuning tool",
+      tests: "tests: model, RTL vs model, firmware vs model, tuning",
+      open: "Open items: ColorChecker colour calibration, 250 MHz video clock, NV12 output, lens shading.",
+      links: { repo: "GitHub repository", board: "Bring-up notes", rtl: "RTL documentation" },
+    },
+  },
+  method: {
+    eyebrow: "02 / Method",
+    title: "The golden model is the source of truth.",
+    steps: [
+      { k: "Contract", t: "Write the spec down", d: "A versioned contract fixes formats, numerics and reduction order. Ambiguity is decided on paper, not in RTL." },
+      { k: "Golden", t: "Make it executable", d: "A Python golden model implements the contract and is checked against the real reference (PyTorch / transformers) first." },
+      { k: "RTL", t: "Match it on every byte", d: "Random fuzzing, directed tie and corner vectors, and mutation testing until every injected bug is caught." },
+      { k: "Board", t: "Prove it on hardware", d: "The same check runs on the FPGA: the board's output is compared bit for bit with the golden model." },
+    ],
+  },
+  notes: {
+    eyebrow: "03 / Engineering notes",
+    title: "What the hardware taught us.",
+    lead: "Short lessons from the project logs. Long-form articles are on the way.",
+    read: "Read in the repo",
+    items: {
+      gemv: { t: "A GEMV is not a GEMM with M = 1", d: "An output-stationary array uses one row at decode. A dot-product path at the port's 16 B/cycle made decode port-bound." },
+      dram: { t: "A DRAM model changes what is worth optimizing", d: "A row interleave that was harmless on an ideal port cost 2.7× read amplification on LPDDR4X." },
+      tie: { t: "Random vectors almost never hit a rounding tie", d: "A wrong rounding mode passed 200k random vectors. Constructed tie vectors caught it at once." },
+      mtp: { t: "Why speculative decoding stays off", d: "Each MTP round costs about 1.76 plain steps on this core, so it only pays above ~77% draft hits." },
+    },
+  },
+  collab: {
+    eyebrow: "04 / Collaborate",
+    title: "Have a hardware problem worth solving?",
+    lead: "Open to selected hardware projects, research collaborations and early-stage teams building AI or vision silicon.",
+    areas: [
+      { t: "AI accelerator architecture", d: "Dataflow, memory hierarchy and roofline analysis for LLM and vision workloads on edge NPUs." },
+      { t: "RTL design & verification", d: "Golden-model-driven RTL, bit-exact regression, fuzzing and mutation testing." },
+      { t: "FPGA bring-up", d: "Kria / Zynq UltraScale+ block designs, Linux drivers and on-board validation." },
+      { t: "ISP pipeline & tuning", d: "Bayer-to-YUV pipelines, 3A statistics, calibration and tuning tools." },
+    ],
+    cta: "Email us",
+    subject: "Project enquiry via cruxopen.com",
+    note: "Tell us what you are building, where it runs, and what “done” looks like.",
+  },
+  footer: {
+    tagline: "Open silicon, from algorithm to board.",
+    licenses: "openTARS is Apache-2.0 · openISP is MIT",
+  },
+};
+
+type Dict = typeof en;
+
+const zh: Dict = {
+  meta: {
+    title: "CruxOpen — 开源硬件，逐位验证",
+    description:
+      "开源 NPU 与 ISP 硬件：从 Golden Model 到 RTL，再到真实运行的 FPGA 板卡。openTARS 在 AMD Kria KV260 上逐位一致地运行 Qwen3.5-0.8B；openISP 是一条在同一板卡上跑通 4K30 的 SystemVerilog 相机流水线。",
+  },
+  nav: { projects: "项目", method: "方法", notes: "笔记", collaborate: "合作", lang: "EN", langHref: "/" },
+  hero: {
+    eyebrow: "开源芯片 · 算法 → RTL → 板卡",
+    title1: "开源硬件，",
+    title2: "逐位验证。",
+    lead: "CruxOpen 以开源方式构建 AI 加速器和图像处理流水线：先写可执行的 Golden Model，再让 RTL 每个字节都与之一致，最后在真实 FPGA 板卡上跑通。",
+    ctaProjects: "查看项目",
+    ctaContact: "联系合作",
+    factsLabel: "实测数据，而非预估",
+  },
+  facts: {
+    tarsDecode: { label: "Qwen3-0.6B 在 KV260 上的解码", unit: "s/token" },
+    tarsExact: { label: "Qwen3.5-0.8B 与 Golden Model 对比", value: "逐位一致", unit: "板上每个 logit" },
+    ispVideo: { label: "openISP 实时相机流水线", unit: "板上实测" },
+    tarsMutants: { label: "回归测试，外加 141 个 RTL 变异体", unit: "项测试" },
+  },
+  projects: {
+    eyebrow: "01 / 项目",
+    title: "两个开源设计，都已在硬件上运行。",
+    lead: "每个仓库都包含 Golden Model、RTL、板卡工程，以及驱动它的软件。",
+    source: "来源",
+    tars: {
+      kind: "大模型加速器 · NPU",
+      tagline: "一个单核 NPU，在一块现成的 FPGA 开发板上运行 Qwen3.5-0.8B 和 Qwen3-0.6B，每个 logit 都与 Golden Model 逐位一致。",
+      demoAlt: "Qwen3.5-0.8B 通过 openTARS NPU 在 KV260 上对话",
+      tableModel: "模型",
+      tableArch: "层结构",
+      tableDecode: "解码",
+      tableImage: "模型镜像",
+      specsTitle: "板上配置",
+      specBoard: "板卡",
+      specClock: "核心时钟",
+      specLut: "LUT 占用",
+      specQuant: "权重",
+      specHistory: "比特流 v1.0 → v3.3",
+      verifyTitle: "验证方式",
+      verify: [
+        "Python 可执行契约与 Golden Model，在写 RTL 之前先与 transformers 对齐",
+        "RTL 与 Golden 逐字节比对：随机指令队列、随机反压、五种阵列形状",
+        "748 项回归测试与 141 个变异体检查：每个注入的 RTL bug 都必须被捕获",
+        "同一核心按 ASIC 做时序：ASAP7 上 1 GHz 布局前时序",
+      ],
+      honest: "如实报告：MTP 投机解码已实现且结果逐位一致，但在这块硬件上平均只有 0.97×（草稿命中率 77% 才回本），因此默认关闭。",
+      links: { repo: "GitHub 仓库", video: "完整演示视频", log: "项目日志" },
+    },
+    isp: {
+      kind: "相机流水线 · ISP",
+      tagline: "一条完整的 SystemVerilog 图像信号处理器（未使用 HLS），从传感器 RAW 输入到实时 HDMI 预览，带硬件 3A 统计和配套调优工具。",
+      imgAlt: "openISP 流水线框图",
+      specsTitle: "板上配置",
+      specSensor: "传感器",
+      specVideo: "视频",
+      specClock: "视频时钟",
+      specThroughput: "数据通路",
+      specMeasured: "实测",
+      specLut: "面积",
+      blocksTitle: "RTL 模块，与整数模型逐位一致",
+      stackTitle: "全栈",
+      stackLine: "RTL → AXI4-Lite 控制 → V4L2 驱动 → AE/AWB/AF 守护进程 → PC 调优工具",
+      tests: "项测试：模型、RTL 对模型、固件对模型、调优",
+      open: "待完成：ColorChecker 色彩标定、250 MHz 视频时钟、NV12 输出、镜头阴影校正。",
+      links: { repo: "GitHub 仓库", board: "调试笔记", rtl: "RTL 文档" },
+    },
+  },
+  method: {
+    eyebrow: "02 / 方法",
+    title: "Golden Model 是唯一的真相来源。",
+    steps: [
+      { k: "Contract", t: "先把规格写下来", d: "用带版本的契约固定格式、数值行为和累加顺序。歧义在纸面上解决，而不是留到 RTL。" },
+      { k: "Golden", t: "让规格可执行", d: "用 Python Golden Model 实现契约，并先与真实参考实现（PyTorch / transformers）对齐。" },
+      { k: "RTL", t: "每个字节都对上", d: "随机 fuzz、构造的舍入与边界向量、变异测试，直到每个注入的 bug 都被抓住。" },
+      { k: "Board", t: "在硬件上证明", d: "同样的检查在 FPGA 上运行：板卡输出与 Golden Model 逐位比对。" },
+    ],
+  },
+  notes: {
+    eyebrow: "03 / 工程笔记",
+    title: "硬件教会我们的事。",
+    lead: "来自项目日志的简短经验，完整技术文章即将发布。",
+    read: "在仓库中阅读",
+    items: {
+      gemv: { t: "GEMV 不是 M = 1 的 GEMM", d: "输出驻留阵列在解码时只用到一行。按端口 16 B/cycle 设计的点积通路，让解码变成纯带宽受限。" },
+      dram: { t: "DRAM 模型会改变优化重点", d: "理想端口下无害的行交织，在 LPDDR4X 上造成了 2.7 倍的读放大。" },
+      tie: { t: "随机向量几乎碰不到舍入平局", d: "一个舍入方式错误的乘法器通过了 20 万个随机向量，构造的平局向量立刻就抓住了它。" },
+      mtp: { t: "为什么投机解码默认关闭", d: "在这个核心上，每轮 MTP 约等于 1.76 次普通解码，草稿命中率超过约 77% 才有收益。" },
+    },
+  },
+  collab: {
+    eyebrow: "04 / 合作",
+    title: "有值得解决的硬件问题？",
+    lead: "欢迎精选的硬件项目、科研合作，以及正在打造 AI 或视觉芯片的早期团队。",
+    areas: [
+      { t: "AI 加速器架构", d: "面向端侧 NPU 的大模型与视觉负载：数据流、存储层次与 Roofline 分析。" },
+      { t: "RTL 设计与验证", d: "Golden Model 驱动的 RTL、逐位回归、fuzz 与变异测试。" },
+      { t: "FPGA 上板", d: "Kria / Zynq UltraScale+ 工程搭建、Linux 驱动与板上验证。" },
+      { t: "ISP 流水线与调优", d: "Bayer 到 YUV 流水线、3A 统计、标定与调优工具。" },
+    ],
+    cta: "发邮件联系",
+    subject: "来自 cruxopen.com 的项目咨询",
+    note: "请简单说明：你在做什么、运行在什么平台上、怎样算“完成”。",
+  },
+  footer: {
+    tagline: "开源芯片，从算法到板卡。",
+    licenses: "openTARS 采用 Apache-2.0 · openISP 采用 MIT",
+  },
+};
+
+export const strings: Record<Lang, Dict> = { en, zh };
+export type Strings = Dict;

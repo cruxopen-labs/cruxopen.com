@@ -1,0 +1,40 @@
+---
+import { notes } from "../data/site";
+import type { Lang } from "../i18n/strings";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const n = strings[lang].notes;
+---
+
+<section id="notes" class="scroll-mt-14 border-b border-ink-800 py-20 sm:py-28">
+  <div class="wrap">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">{n.eyebrow}</p>
+        <h2 class="mt-4 text-3xl font-semibold tracking-[-0.02em] text-ink-100 sm:text-4xl">{n.title}</h2>
+      </div>
+      <p class="max-w-sm text-sm text-ink-400">{n.lead}</p>
+    </div>
+
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      {notes.map((note) => {
+        const item = n.items[note.id];
+        return (
+          <a
+            href={note.href}
+            class="group flex flex-col border border-ink-700 bg-ink-900 p-6 transition-colors hover:border-signal-600 hover:bg-ink-850"
+          >
+            <span class="font-mono text-[11px] text-ink-400">{note.repo}</span>
+            <h3 class="mt-3 text-lg font-semibold leading-snug text-ink-100 group-hover:text-signal-300">{item.t}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink-300">{item.d}</p>
+            <span class="mt-5 font-mono text-xs text-ink-400 group-hover:text-signal-400">{n.read} ↗</span>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

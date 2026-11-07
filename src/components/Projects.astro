@@ -1,0 +1,192 @@
+---
+import { tars, isp } from "../data/site";
+import type { Lang } from "../i18n/strings";
+import { strings } from "../i18n/strings";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const p = strings[lang].projects;
+const T = p.tars;
+const I = p.isp;
+
+const tarsSpecs = [
+  [T.specBoard, tars.board],
+  [T.specClock, tars.clock],
+  [T.specLut, tars.lut],
+  [T.specQuant, tars.quant],
+  [T.specHistory, `${tars.speedupFromV1.from} → ${tars.speedupFromV1.to} s/token`],
+];
+const ispSpecs = [
+  [I.specSensor, isp.sensor],
+  [I.specVideo, isp.video],
+  [I.specMeasured, `${isp.fps} @ 4K`],
+  [I.specClock, isp.clock],
+  [I.specThroughput, isp.ppc],
+  [I.specLut, isp.lutOoc],
+];
+const linkCls = "inline-flex items-center gap-1.5 text-sm text-ink-200 underline decoration-ink-600 underline-offset-4 transition-colors hover:text-signal-400 hover:decoration-signal-500";
+---
+
+<section id="projects" class="scroll-mt-14 border-b border-ink-800 py-20 sm:py-28">
+  <div class="wrap">
+    <p class="eyebrow">{p.eyebrow}</p>
+    <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-[-0.02em] text-ink-100 sm:text-4xl">{p.title}</h2>
+    <p class="mt-4 max-w-2xl text-ink-300">{p.lead}</p>
+
+    <!-- openTARS -->
+    <article class="mt-14 border border-ink-700 bg-ink-900" aria-labelledby="tars-title">
+      <div class="grid lg:grid-cols-[1.1fr_1fr]">
+        <div class="min-w-0 border-b border-ink-700 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <p class="eyebrow text-signal-400">{T.kind}</p>
+          <h3 id="tars-title" class="mt-3 font-mono text-3xl font-semibold text-ink-100">openTARS</h3>
+          <p class="mt-4 leading-relaxed text-ink-300">{T.tagline}</p>
+
+          <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="font-mono text-[11px] uppercase tracking-wider text-ink-400">
+                <tr class="border-b border-ink-700">
+                  <th class="py-2 pr-3 font-normal">{T.tableModel}</th>
+                  <th class="hidden py-2 pr-3 font-normal sm:table-cell">{T.tableArch}</th>
+                  <th class="py-2 pr-3 text-right font-normal">{T.tableDecode}</th>
+                  <th class="whitespace-nowrap py-2 text-right font-normal">{T.tableImage}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tars.models.map((m) => (
+                  <tr class="border-b border-ink-800">
+                    <td class="whitespace-nowrap py-2.5 pr-3 font-medium text-ink-100">{m.name}</td>
+                    <td class="hidden py-2.5 pr-3 text-ink-300 sm:table-cell">{m.arch}</td>
+                    <td class="num whitespace-nowrap py-2.5 pr-3 text-right font-mono text-signal-400">{m.decode} s/tok</td>
+                    <td class="num whitespace-nowrap py-2.5 text-right font-mono text-ink-300">{m.image}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="eyebrow mt-8">{T.specsTitle}</h4>
+          <dl class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+            {tarsSpecs.map(([k, v]) => (
+              <div class="flex justify-between gap-4 border-b border-ink-800 py-2 text-sm">
+                <dt class="shrink-0 text-ink-400">{k}</dt>
+                <dd class="num text-right font-mono text-ink-100">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <h4 class="eyebrow mt-8">{T.verifyTitle}</h4>
+          <ul class="mt-3 space-y-2.5 text-sm text-ink-300">
+            {T.verify.map((v) => (
+              <li class="flex gap-3">
+                <span class="mt-[3px] font-mono text-xs text-pass" aria-hidden="true">✓</span>
+                <span>{v}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p class="mt-6 border-l-2 border-signal-600 bg-ink-850 px-4 py-3 text-sm leading-relaxed text-ink-300">{T.honest}</p>
+
+          <div class="mt-7 flex flex-wrap gap-x-6 gap-y-3">
+            <a class={linkCls} href={tars.repo}>{T.links.repo} ↗</a>
+            <a class={linkCls} href={tars.demoVideo}>{T.links.video} ↗</a>
+            <a class={linkCls} href={tars.history}>{T.links.log} ↗</a>
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col bg-ink-950 p-5 sm:p-8">
+          <figure class="border border-ink-700 bg-black">
+            <img
+              src="/media/opentars-qwen35-kv260.gif"
+              alt={T.demoAlt}
+              width="656"
+              height="412"
+              loading="lazy"
+              decoding="async"
+              class="block h-auto w-full"
+            />
+            <figcaption class="border-t border-ink-700 px-3 py-2 font-mono text-[11px] text-ink-400">
+              Qwen3.5-0.8B · KV260 · bitstream v3.3
+            </figcaption>
+          </figure>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {tars.stack.map((s) => (
+              <span class="border border-ink-700 px-2 py-1 font-mono text-[11px] text-ink-300">{s}</span>
+            ))}
+          </div>
+          <p class="mt-auto pt-6 font-mono text-[10px] text-ink-400/80">↳ {p.source}: openTARS/README.md</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- openISP -->
+    <article class="mt-8 border border-ink-700 bg-ink-900" aria-labelledby="isp-title">
+      <div class="grid lg:grid-cols-[1.1fr_1fr]">
+        <div class="min-w-0 border-b border-ink-700 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <p class="eyebrow text-signal-400">{I.kind}</p>
+          <h3 id="isp-title" class="mt-3 font-mono text-3xl font-semibold text-ink-100">openISP</h3>
+          <p class="mt-4 leading-relaxed text-ink-300">{I.tagline}</p>
+
+          <h4 class="eyebrow mt-8">{I.specsTitle}</h4>
+          <dl class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+            {ispSpecs.map(([k, v]) => (
+              <div class="flex justify-between gap-4 border-b border-ink-800 py-2 text-sm">
+                <dt class="shrink-0 text-ink-400">{k}</dt>
+                <dd class="num text-right font-mono text-ink-100">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <h4 class="eyebrow mt-8">{I.stackTitle}</h4>
+          <p class="mt-3 font-mono text-[13px] leading-relaxed text-ink-200">{I.stackLine}</p>
+          <p class="mt-3 text-sm text-ink-300">
+            <span class="num font-mono text-pass">{isp.tests}</span> {I.tests}
+          </p>
+          <p class="mt-6 border-l-2 border-ink-600 bg-ink-850 px-4 py-3 text-sm leading-relaxed text-ink-400">{I.open}</p>
+
+          <div class="mt-7 flex flex-wrap gap-x-6 gap-y-3">
+            <a class={linkCls} href={isp.repo}>{I.links.repo} ↗</a>
+            <a class={linkCls} href={isp.boardNotes}>{I.links.board} ↗</a>
+            <a class={linkCls} href={isp.rtlDoc}>{I.links.rtl} ↗</a>
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col bg-ink-950 p-5 sm:p-8">
+          <figure class="border border-ink-700 bg-ink-900 p-4 sm:p-5" aria-label={I.imgAlt}>
+            <div class="flex items-center justify-between font-mono text-[11px] text-ink-400">
+              <span>CSI-2 RAW in</span>
+              <span>{isp.ppc}</span>
+            </div>
+            <ol class="mt-3 space-y-2">
+              {isp.domains.map((d) => (
+                <li class="grid grid-cols-[3.5rem_1fr] items-start gap-3">
+                  <span class="pt-1 font-mono text-[10px] uppercase tracking-wider text-signal-400">{d.name}</span>
+                  <span class="flex flex-wrap items-center gap-1">
+                    {d.blocks.map((b, j) => (
+                      <>
+                        <span class="border border-ink-600 bg-ink-950 px-1.5 py-0.5 font-mono text-[11px] text-ink-100">{b}</span>
+                        {j < d.blocks.length - 1 && <span class="font-mono text-[10px] text-ink-600" aria-hidden="true">→</span>}
+                      </>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <div class="mt-3 flex items-center justify-between border-t border-ink-700 pt-3 font-mono text-[11px] text-ink-400">
+              <span>+ 3A statistics (AE · AWB · AF)</span>
+              <span>YUYV → DDR → HDMI/DP</span>
+            </div>
+            <figcaption class="mt-3 text-xs text-ink-400">{I.blocksTitle}</figcaption>
+          </figure>
+          <div class="mt-5 flex flex-wrap gap-2">
+            {isp.stack.map((s) => (
+              <span class="border border-ink-800 bg-ink-900 px-2 py-1 font-mono text-[11px] text-ink-400">{s}</span>
+            ))}
+          </div>
+          <p class="mt-auto pt-6 font-mono text-[10px] text-ink-400/80">↳ {p.source}: openISP/README.md · hw/kv260/README.md</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
