@@ -9,6 +9,7 @@ export const EMAIL = "hello@cruxopen.com";
 export const repos = {
   openTARS: `${ORG}/openTARS`,
   openISP: `${ORG}/openISP`,
+  openDARS: `${ORG}/openDARS`,
 } as const;
 
 export const blob = (repo: keyof typeof repos, path: string, branch = repo === "openISP" ? "master" : "main") =>
@@ -63,6 +64,22 @@ export const isp = {
     { name: "YUV", blocks: ["NLM", "BNF", "EE", "FCS", "HSC", "BCC"] },
   ],
   stack: ["SystemVerilog (no HLS)", "Verilator / xsim", "V4L2 driver", "AE/AWB/AF firmware", "PC tuning tool"],
+};
+
+/** Design-space exploration: the numbers are from the openDARS README and report. */
+export const dars = {
+  repo: repos.openDARS,
+  report: blob("openDARS", "reports/report.md"),
+  assessment: blob("openDARS", "docs/cycle_accuracy_assessment.md"),
+  models: 3,
+  workloads: 6,
+  grid: 128,
+  feasible: 80,
+  pareto: 7,
+  trainingMape: "0.30%",
+  gemmaMape: "4.20%",
+  tests: "21",
+  stack: ["Python", "NumPy / SciPy", "HF configs", "NSGA-II", "Matplotlib"],
 };
 
 /** Engineering notes: each links to the real document in a repo. */

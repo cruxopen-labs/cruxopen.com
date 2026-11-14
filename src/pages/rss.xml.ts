@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   );
   return rss({
     title: "CruxOpen blog",
-    description: "Open hardware, verified bit for bit: engineering notes from openTARS and openISP.",
+    description: "Open hardware, verified bit for bit: engineering notes from openTARS, openISP and openDARS.",
     site: context.site!,
     items: posts.map((p) => ({
       title: p.data.title,

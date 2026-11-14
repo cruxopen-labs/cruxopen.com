@@ -1,5 +1,5 @@
 ---
-import { tars, isp } from "../data/site";
+import { tars, isp, dars } from "../data/site";
 import type { Lang } from "../i18n/strings";
 import { strings } from "../i18n/strings";
 
@@ -10,6 +10,7 @@ const { lang } = Astro.props;
 const p = strings[lang].projects;
 const T = p.tars;
 const I = p.isp;
+const D = p.dars;
 
 const tarsSpecs = [
   [T.specBoard, tars.board],
@@ -25,6 +26,14 @@ const ispSpecs = [
   [I.specClock, isp.clock],
   [I.specThroughput, isp.ppc],
   [I.specLut, isp.lutOoc],
+];
+const darsSpecs = [
+  [D.specModels, `${dars.models}`],
+  [D.specWorkloads, `${dars.workloads}`],
+  [D.specGrid, `${dars.grid}`],
+  [D.specFeasible, `${dars.feasible}`],
+  [D.specPareto, `${dars.pareto}`],
+  [D.specTests, `${dars.tests}`],
 ];
 const linkCls = "inline-flex items-center gap-1.5 text-sm text-ink-200 underline decoration-ink-600 underline-offset-4 transition-colors hover:text-signal-400 hover:decoration-signal-500";
 ---
@@ -185,6 +194,83 @@ const linkCls = "inline-flex items-center gap-1.5 text-sm text-ink-200 underline
             ))}
           </div>
           <p class="mt-auto pt-6 font-mono text-[10px] text-ink-400/80">↳ {p.source}: openISP/README.md · hw/kv260/README.md</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- openDARS -->
+    <article class="mt-8 border border-ink-700 bg-ink-900" aria-labelledby="dars-title">
+      <div class="grid lg:grid-cols-[1.1fr_1fr]">
+        <div class="min-w-0 border-b border-ink-700 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <p class="eyebrow text-signal-400">{D.kind}</p>
+          <h3 id="dars-title" class="mt-3 font-mono text-3xl font-semibold text-ink-100">openDARS</h3>
+          <p class="mt-4 leading-relaxed text-ink-300">{D.tagline}</p>
+
+          <h4 class="eyebrow mt-8">{D.specsTitle}</h4>
+          <dl class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+            {darsSpecs.map(([k, v]) => (
+              <div class="flex justify-between gap-4 border-b border-ink-800 py-2 text-sm">
+                <dt class="shrink-0 text-ink-400">{k}</dt>
+                <dd class="num text-right font-mono text-ink-100">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <h4 class="eyebrow mt-8">{D.verifyTitle}</h4>
+          <ul class="mt-3 space-y-2.5 text-sm text-ink-300">
+            {D.verify.map((v) => (
+              <li class="flex gap-3">
+                <span class="mt-[3px] font-mono text-xs text-pass" aria-hidden="true">✓</span>
+                <span>{v}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p class="mt-6 border-l-2 border-signal-600 bg-ink-850 px-4 py-3 text-sm leading-relaxed text-ink-300">{D.honest}</p>
+
+          <div class="mt-7 flex flex-wrap gap-x-6 gap-y-3">
+            <a class={linkCls} href={dars.repo}>{D.links.repo} ↗</a>
+            <a class={linkCls} href={dars.report}>{D.links.report} ↗</a>
+            <a class={linkCls} href={dars.assessment}>{D.links.assessment} ↗</a>
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col bg-ink-950 p-5 sm:p-8">
+          <figure class="border border-ink-700 bg-ink-900 p-4 sm:p-5" aria-label={D.pipelineAlt}>
+            <div class="flex items-center justify-between font-mono text-[11px] text-ink-400">
+              <span>{D.pipelineTitle}</span>
+              <span>{dars.grid} → {dars.pareto}</span>
+            </div>
+            <ol class="mt-4 space-y-2">
+              {D.pipeline.map((s, i) => (
+                <li class="flex items-center gap-2">
+                  <span class="w-6 font-mono text-[10px] text-ink-400">0{i + 1}</span>
+                  <span class="border border-ink-600 bg-ink-950 px-2 py-1 font-mono text-[11px] text-ink-100">{s}</span>
+                </li>
+              ))}
+            </ol>
+            <div class="mt-4 grid grid-cols-3 gap-2 border-t border-ink-700 pt-3 text-center">
+              <div>
+                <span class="block font-mono text-lg text-signal-500">{dars.trainingMape}</span>
+                <span class="font-mono text-[10px] text-ink-400">{D.mapeLabel}</span>
+              </div>
+              <div>
+                <span class="block font-mono text-lg text-signal-500">{dars.gemmaMape}</span>
+                <span class="font-mono text-[10px] text-ink-400">{D.holdoutLabel}</span>
+              </div>
+              <div>
+                <span class="block font-mono text-lg text-signal-500">{dars.pareto}</span>
+                <span class="font-mono text-[10px] text-ink-400">{D.paretoLabel}</span>
+              </div>
+            </div>
+            <figcaption class="mt-3 text-xs leading-relaxed text-ink-400">{D.pipelineNote}</figcaption>
+          </figure>
+          <div class="mt-5 flex flex-wrap gap-2">
+            {dars.stack.map((s) => (
+              <span class="border border-ink-800 bg-ink-900 px-2 py-1 font-mono text-[11px] text-ink-400">{s}</span>
+            ))}
+          </div>
+          <p class="mt-auto pt-6 font-mono text-[10px] text-ink-400/80">↳ {p.source}: openDARS/README.md · reports/report.md</p>
         </div>
       </div>
     </article>

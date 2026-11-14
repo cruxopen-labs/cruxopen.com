@@ -24,4 +24,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/blog/qwen35-kv260-bit-exact/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/blog/qwen35-kv260-bit-exact/"/>
   </url>
+  <url>
+    <loc>https://cruxopen.com/blog/opendars-design-space-exploration/</loc>
+    <lastmod>2026-11-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/blog/opendars-design-space-exploration/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/blog/opendars-design-space-exploration/"/>
+  </url>
+  <url>
+    <loc>https://cruxopen.com/zh/blog/opendars-design-space-exploration/</loc>
+    <lastmod>2026-11-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cruxopen.com/blog/opendars-design-space-exploration/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://cruxopen.com/zh/blog/opendars-design-space-exploration/"/>
+  </url>
 </urlset>

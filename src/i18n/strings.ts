@@ -6,7 +6,7 @@ const en = {
   meta: {
     title: "CruxOpen — Open hardware, verified bit for bit",
     description:
-      "Open-source NPU and ISP hardware, from golden model to RTL to a running FPGA board. openTARS runs Qwen3.5-0.8B bit-exact on an AMD Kria KV260; openISP is a SystemVerilog camera pipeline running 4K30 on the same board.",
+      "Open-source NPU and ISP hardware, plus openDARS, the calibrated design-space explorer that chooses what to build next: golden model → RTL → FPGA board → next hardware point.",
   },
   nav: { projects: "Projects", method: "Method", notes: "Notes", collaborate: "Collaborate", blog: "Blog", lang: "中文", langHref: "/zh/" },
   hero: {
@@ -14,7 +14,7 @@ const en = {
     title1: "Open hardware,",
     title2: "verified bit for bit.",
     lead:
-      "CruxOpen builds AI accelerators and image pipelines in the open: an executable golden model first, RTL that matches it on every byte, and a real FPGA board at the end.",
+      "CruxOpen builds AI accelerators and image pipelines in the open: an executable golden model first, RTL that matches it on every byte, and a real FPGA board at the end. openDARS turns those measurements into the next design.",
     ctaProjects: "See the projects",
     ctaContact: "Start a conversation",
     factsLabel: "Measured, not projected",
@@ -27,8 +27,8 @@ const en = {
   },
   projects: {
     eyebrow: "01 / Projects",
-    title: "Two open-source designs, both running on hardware.",
-    lead: "Each repository holds the golden model, the RTL, the board build and the software that drives it.",
+    title: "Three open-source projects: two on the board, one choosing what comes next.",
+    lead: "openTARS and openISP ship golden models, RTL and board builds. openDARS turns the same evidence into a calibrated hardware and mapping search.",
     source: "Source",
     tars: {
       kind: "LLM accelerator · NPU",
@@ -71,6 +71,33 @@ const en = {
       tests: "tests: model, RTL vs model, firmware vs model, tuning",
       open: "Open items: ColorChecker colour calibration, 250 MHz video clock, NV12 output, lens shading.",
       links: { repo: "GitHub repository", board: "Bring-up notes", rtl: "RTL documentation" },
+    },
+    dars: {
+      kind: "Design-space exploration · DSE",
+      tagline: "A calibrated analytical explorer: three model families and 13 preserved board measurements become a W8A8 workload model, PPA estimates and a Pareto frontier, with no RTL simulator in the inner loop.",
+      pipelineTitle: "From evidence to a frontier",
+      pipelineAlt: "openDARS flow from Hugging Face configs to a Pareto frontier",
+      pipeline: ["HF configs", "W8A8 queues", "Calibrated cycles", "PPA", "Pareto"],
+      pipelineNote: "128 configurations in; 7 nondominated points out. The inner loop is a calibrated regression, not a simulator.",
+      specsTitle: "Search space",
+      specModels: "Model families",
+      specWorkloads: "Default workloads",
+      specGrid: "Configurations",
+      specFeasible: "Resource-feasible",
+      specPareto: "Pareto points",
+      specTests: "Tests",
+      verifyTitle: "How it is grounded",
+      verify: [
+        "Shape-only lowering checked against 12 real openTARS descriptor queues",
+        "13 measurement snapshots copied byte-for-byte from openTARS",
+        "0.30% training MAPE; 4.20% on the held-out Gemma 3 model",
+        "21 tests; the checked-in JSON, Markdown and PNG reports regenerate",
+      ],
+      honest: "Analytical, not RTL simulation: descriptors execute serially, ASIC PPA is explicitly uncalibrated, and the fastest FPGA point is a 99.69% LUT knife-edge. The report recommends synthesizing the 94.50% point first.",
+      mapeLabel: "fit MAPE",
+      holdoutLabel: "Gemma holdout",
+      paretoLabel: "Pareto points",
+      links: { repo: "GitHub repository", report: "Generated report", assessment: "Cycle-accuracy assessment" },
     },
   },
   method: {
@@ -125,7 +152,7 @@ const en = {
   },
   footer: {
     tagline: "Open silicon, from algorithm to board.",
-    licenses: "openTARS is Apache-2.0 · openISP is MIT",
+    licenses: "openTARS is Apache-2.0 · openISP is MIT · openDARS is Apache-2.0",
   },
 };
 
@@ -135,14 +162,14 @@ const zh: Dict = {
   meta: {
     title: "CruxOpen — 开源硬件，逐位验证",
     description:
-      "开源 NPU 与 ISP 硬件：从 Golden Model 到 RTL，再到真实运行的 FPGA 板卡。openTARS 在 AMD Kria KV260 上逐位一致地运行 Qwen3.5-0.8B；openISP 是一条在同一板卡上跑通 4K30 的 SystemVerilog 相机流水线。",
+      "开源 NPU、ISP 硬件，以及负责决定下一步做什么的 openDARS 设计空间探索器：Golden Model → RTL → FPGA 板卡 → 下一个硬件点。",
   },
   nav: { projects: "项目", method: "方法", notes: "笔记", collaborate: "合作", blog: "博客", lang: "EN", langHref: "/" },
   hero: {
     eyebrow: "开源芯片 · 算法 → RTL → 板卡",
     title1: "开源硬件，",
     title2: "逐位验证。",
-    lead: "CruxOpen 以开源方式构建 AI 加速器和图像处理流水线：先写可执行的 Golden Model，再让 RTL 每个字节都与之一致，最后在真实 FPGA 板卡上跑通。",
+    lead: "CruxOpen 以开源方式构建 AI 加速器和图像处理流水线：先写可执行的 Golden Model，再让 RTL 每个字节都与之一致，最后在真实 FPGA 板卡上跑通。openDARS 把这些测量变成下一个设计。",
     ctaProjects: "查看项目",
     ctaContact: "联系合作",
     factsLabel: "实测数据，而非预估",
@@ -155,8 +182,8 @@ const zh: Dict = {
   },
   projects: {
     eyebrow: "01 / 项目",
-    title: "两个开源设计，都已在硬件上运行。",
-    lead: "每个仓库都包含 Golden Model、RTL、板卡工程，以及驱动它的软件。",
+    title: "三个开源项目：两个已在板上运行，一个决定下一步做什么。",
+    lead: "openTARS 和 openISP 交付 Golden Model、RTL 与板卡工程；openDARS 把同一批证据变成可标定的硬件与映射搜索。",
     source: "来源",
     tars: {
       kind: "大模型加速器 · NPU",
@@ -199,6 +226,33 @@ const zh: Dict = {
       tests: "项测试：模型、RTL 对模型、固件对模型、调优",
       open: "待完成：ColorChecker 色彩标定、250 MHz 视频时钟、NV12 输出、镜头阴影校正。",
       links: { repo: "GitHub 仓库", board: "调试笔记", rtl: "RTL 文档" },
+    },
+    dars: {
+      kind: "设计空间探索 · DSE",
+      tagline: "一个经过标定的分析式探索器：三个模型家族和 13 份保留的板上测量，变成 W8A8 workload 模型、PPA 估计和 Pareto 前沿，内循环里没有 RTL 仿真器。",
+      pipelineTitle: "从证据到前沿",
+      pipelineAlt: "openDARS 从 Hugging Face 配置到 Pareto 前沿的流程",
+      pipeline: ["HF 配置", "W8A8 队列", "标定周期", "PPA", "Pareto"],
+      pipelineNote: "输入 128 种配置，输出 7 个非支配点。内循环是标定回归，不是仿真器。",
+      specsTitle: "搜索空间",
+      specModels: "模型家族",
+      specWorkloads: "默认 workload",
+      specGrid: "配置数",
+      specFeasible: "资源可行",
+      specPareto: "Pareto 点",
+      specTests: "测试",
+      verifyTitle: "证据链",
+      verify: [
+        "shape-only lowering 与 12 条真实 openTARS 描述符队列逐项比对",
+        "13 份测量快照从 openTARS 逐字节复制",
+        "训练集总周期 MAPE 0.30%；留出的 Gemma 3 为 4.20%",
+        "21 项测试；仓库内的 JSON、Markdown 与 PNG 报告可逐字节重生成",
+      ],
+      honest: "这是分析模型，不是 RTL 仿真：描述符串行执行，ASIC PPA 明确未标定，最快的 FPGA 点只有 99.69% LUT 的刀锋余量。报告建议先综合 94.50% 的那个点。",
+      mapeLabel: "拟合 MAPE",
+      holdoutLabel: "Gemma 留出",
+      paretoLabel: "Pareto 点",
+      links: { repo: "GitHub 仓库", report: "生成的报告", assessment: "Cycle-accurate 评估" },
     },
   },
   method: {
@@ -253,7 +307,7 @@ const zh: Dict = {
   },
   footer: {
     tagline: "开源芯片，从算法到板卡。",
-    licenses: "openTARS 采用 Apache-2.0 · openISP 采用 MIT",
+    licenses: "openTARS 采用 Apache-2.0 · openISP 采用 MIT · openDARS 采用 Apache-2.0",
   },
 };
 
